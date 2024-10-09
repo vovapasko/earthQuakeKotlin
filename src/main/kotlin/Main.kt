@@ -4,7 +4,7 @@ import org.example.utils.HaversinDistanceCalculator
 import models.Coordinate
 import models.EarthquakeFromCoordinatePoint
 import org.example.engine.EarthquakeEngine
-import org.example.extractors.FileEarthquakeDataExtractor
+import org.example.extractors.HTTPEarthquakeDataExtractor
 import org.example.utils.MetersToKilometersConverter
 
 
@@ -19,7 +19,7 @@ fun calculateFromCoordinates(placeCoordinate: Coordinate): List<EarthquakeFromCo
     val engine = EarthquakeEngine(
         coordinateCalculator = HaversinDistanceCalculator(),
         measureConverter = MetersToKilometersConverter(),
-        dataExtractor = FileEarthquakeDataExtractor(filePath = "src/main/resources/api-response.json")
+        dataExtractor = HTTPEarthquakeDataExtractor()
     )
 
     return engine.retrieveClosestEarthquakes(placeCoordinate)
@@ -27,11 +27,9 @@ fun calculateFromCoordinates(placeCoordinate: Coordinate): List<EarthquakeFromCo
 
 
 fun getCoordinates(): Coordinate {
-    val inputList = readln().split(' ').map { it.toDouble() }
-    if (inputList.size < 2) {
-        throw IllegalArgumentException("must have at least 2 coordinates")
-    }
-    return Coordinate(inputList[0], inputList[1])
+    val latitude = readln().toDouble()
+    val longitude = readln().toDouble()
+    return Coordinate(latitude, longitude)
 }
 
 
