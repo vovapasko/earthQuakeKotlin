@@ -1,7 +1,7 @@
 import io.mockk.mockk
-import org.example.data.Coordinate
-import org.example.data.EarthquakeData
-import org.example.engine.calculateFromCoordinates
+import models.Coordinate
+import models.EarthquakeData
+import org.example.calculateFromCoordinates
 import org.example.extractors.EarthquakeDataExtractor
 import org.example.extractors.getEarthquakeList
 import org.junit.jupiter.api.Test
@@ -10,13 +10,6 @@ import kotlin.test.assertNotNull
 
 class MainKtTest {
 
-    @Test
-    fun main() {
-    }
-
-    @Test
-    fun getClosestEarthquakes() {
-    }
 
     @Test
     fun `should return earthquake list`() {

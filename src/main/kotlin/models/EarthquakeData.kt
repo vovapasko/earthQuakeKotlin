@@ -1,4 +1,4 @@
-package org.example.data
+package models
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import kotlin.random.Random
@@ -17,10 +17,16 @@ data class JsonEarthquakeData(
     }
 }
 
-data class EarthquakeData(
-    val metadata: Map<String, String>,
-    val features: List<EarthquakeFeature>,
-)
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class JsonEarthquakeFeature(val properties: Map<String, String>, val geometry: JsonEarthquakeGeometry) {
+    companion object {
+        fun to(jsonFeature: JsonEarthquakeFeature) = EarthquakeFeature(
+            properties = jsonFeature.properties,
+            title = jsonFeature.properties["title"] ?: "Untitled earthquake ${Random.nextInt(0, Int.MAX_VALUE)}",
+            geometry = JsonEarthquakeGeometry.to(jsonFeature.geometry)
+        )
+    }
+}
 
 data class JsonEarthquakeGeometry(
     val type: String,
@@ -43,19 +49,12 @@ data class EarthquakeGeometry(
     val coordinates: Coordinate
 )
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class JsonEarthquakeFeature(val properties: Map<String, String>, val geometry: JsonEarthquakeGeometry) {
-    companion object {
-        fun to(jsonFeature: JsonEarthquakeFeature) = EarthquakeFeature(
-            properties = jsonFeature.properties,
-            title = jsonFeature.properties["title"] ?: "Untitled earthquake ${Random.nextInt(0, Int.MAX_VALUE)}",
-            geometry = JsonEarthquakeGeometry.to(jsonFeature.geometry)
-        )
-    }
-}
+data class EarthquakeData(
+    val metadata: Map<String, String>,
+    val features: List<EarthquakeFeature>,
+)
 
 data class EarthquakeFeature(val properties: Map<String, String>, val title: String, val geometry: EarthquakeGeometry)
-
 
 data class Coordinate(val latitude: Double, val longitude: Double, val depth: Double = 0.0)
 

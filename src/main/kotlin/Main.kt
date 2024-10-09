@@ -1,13 +1,28 @@
 package org.example
 
-import org.example.data.Coordinate
-import org.example.engine.calculateFromCoordinates
+import org.example.utils.HaversinDistanceCalculator
+import models.Coordinate
+import models.EarthquakeFromCoordinatePoint
+import org.example.engine.EarthquakeEngine
+import org.example.extractors.FileEarthquakeDataExtractor
+import org.example.utils.MetersToKilometersConverter
 
 
 fun main() {
     val placeCoordinate = getCoordinates()
     val earthquakes = calculateFromCoordinates(placeCoordinate)
     println(earthquakes)
+}
+
+
+fun calculateFromCoordinates(placeCoordinate: Coordinate): List<EarthquakeFromCoordinatePoint> {
+    val engine = EarthquakeEngine(
+        coordinateCalculator = HaversinDistanceCalculator(),
+        measureConverter = MetersToKilometersConverter(),
+        dataExtractor = FileEarthquakeDataExtractor(filePath = "src/main/resources/api-response.json")
+    )
+
+    return engine.retrieveClosestEarthquakes(placeCoordinate)
 }
 
 

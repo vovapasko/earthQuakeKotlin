@@ -1,7 +1,7 @@
-package org.example.calculator
+package org.example.utils
 
 import org.apache.lucene.util.SloppyMath.haversinMeters
-import org.example.data.Coordinate
+import models.Coordinate
 
 
 interface DistanceCoordinateCalculator {

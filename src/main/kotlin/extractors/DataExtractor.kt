@@ -2,8 +2,8 @@ package org.example.extractors
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.example.data.EarthquakeData
-import org.example.data.JsonEarthquakeData
+import models.EarthquakeData
+import models.JsonEarthquakeData
 import java.io.File
 
 
