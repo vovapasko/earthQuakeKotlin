@@ -3,7 +3,9 @@ package org.example
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import org.apache.lucene.util.SloppyMath.haversinMeters
 import java.io.File
+import kotlin.random.Random
 
 data class Coordinate(val latitude: Double, val longitude: Double, val depth: Double = 0.0)
 
@@ -16,17 +18,36 @@ data class EarthquakeFromCoordinatePoint(val title: String, val distance: Double
 fun main() {
     val placeCoordinate = getCoordinates()
     println(placeCoordinate)
-    val earthquakeList = getEarthquakeList()
-    val closestEarthquakesToThePoint = getClosestEarthquakes(placeCoordinate, earthquakeList)
+    val earthquakeData = getEarthquakeList()
+    val closestEarthquakesToThePoint = getClosestEarthquakes(placeCoordinate, earthquakeData)
     closestEarthquakesToThePoint.forEach { println(it) }
 }
 
 fun getClosestEarthquakes(
     placeCoordinate: Coordinate,
-    earthquakeList: Any,
+    earthquakeData: EarthquakeData,
     earthquakesAmount: Int = 10
 ): List<EarthquakeFromCoordinatePoint> {
-    return emptyList()
+    val earthquakeCoordinatesMap: Map<String, Coordinate> = earthquakeData.features.associate {
+        val title = it.title
+        title to it.geometry.coordinates
+    }
+    val earthquakeDistanceMap = mutableMapOf<String, Double>()
+    earthquakeCoordinatesMap.forEach { earthquakeCoordinate ->
+        val (inputLatitude, inputLongitude) = placeCoordinate
+        val (earthquakeLatitude, earthquakeLongitude) = earthquakeCoordinate.value
+        val meters = haversinMeters(inputLatitude, inputLongitude, earthquakeLatitude, earthquakeLongitude)
+        earthquakeDistanceMap[earthquakeCoordinate.key] = meters
+    }
+    val closestEarthquakes: List<EarthquakeFromCoordinatePoint> =
+        earthquakeDistanceMap.entries.sortedBy { it.value }.take(earthquakesAmount).map {
+            EarthquakeFromCoordinatePoint(
+                title = it.key,
+                distance = it.value
+            )
+        }
+
+    return closestEarthquakes
 }
 
 fun getEarthquakeList(): EarthquakeData {
@@ -81,12 +102,13 @@ data class JsonEarthquakeFeature(val properties: Map<String, String>, val geomet
     companion object {
         fun to(jsonFeature: JsonEarthquakeFeature) = EarthquakeFeature(
             properties = jsonFeature.properties,
+            title = jsonFeature.properties["title"] ?: "Untitled earthquake ${Random.nextInt(0, Int.MAX_VALUE)}",
             geometry = JsonEarthquakeGeometry.to(jsonFeature.geometry)
         )
     }
 }
 
-data class EarthquakeFeature(val properties: Map<String, String>, val geometry: EarthquakeGeometry)
+data class EarthquakeFeature(val properties: Map<String, String>, val title: String, val geometry: EarthquakeGeometry)
 
 fun getCoordinates(): Coordinate {
     val inputList = readln().split(' ').map { it.toDouble() }
