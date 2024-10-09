@@ -1,10 +1,9 @@
 import io.mockk.mockk
-import net.bytebuddy.matcher.ElementMatchers.any
 import org.example.data.Coordinate
 import org.example.data.EarthquakeData
-import org.example.engine.EarthquakeDataExtractor
 import org.example.engine.calculateFromCoordinates
-import org.example.engine.getEarthquakeList
+import org.example.extractors.EarthquakeDataExtractor
+import org.example.extractors.getEarthquakeList
 import org.junit.jupiter.api.Test
 import kotlin.test.assertNotNull
 

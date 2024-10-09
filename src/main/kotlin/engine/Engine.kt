@@ -1,13 +1,11 @@
 package org.example.engine
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import org.apache.lucene.util.SloppyMath.haversinMeters
 import org.example.data.Coordinate
 import org.example.data.EarthquakeData
 import org.example.data.EarthquakeFromCoordinatePoint
-import org.example.data.JsonEarthquakeData
-import java.io.File
+import org.example.extractors.FileEarthquakeDataExtractor
+import org.example.extractors.getEarthquakeList
 
 
 fun calculateFromCoordinates(placeCoordinate: Coordinate): List<EarthquakeFromCoordinatePoint> {
@@ -45,20 +43,3 @@ fun getClosestEarthquakes(
     return closestEarthquakes
 }
 
-fun getEarthquakeList(dataExtractor: EarthquakeDataExtractor): EarthquakeData {
-    return dataExtractor.retrieveEarthquakeData()
-}
-
-interface EarthquakeDataExtractor {
-    fun retrieveEarthquakeData(): EarthquakeData
-}
-
-class FileEarthquakeDataExtractor(private val filePath: String) : EarthquakeDataExtractor {
-    override fun retrieveEarthquakeData(): EarthquakeData {
-        val mapper = jacksonObjectMapper()
-        val jsonFile = File(filePath)
-        val jsonEarthquakeData: JsonEarthquakeData = mapper.readValue(jsonFile)
-        return JsonEarthquakeData.to(jsonEarthquakeData)
-    }
-
-}
