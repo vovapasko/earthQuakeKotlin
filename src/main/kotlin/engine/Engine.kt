@@ -1,6 +1,7 @@
 package org.example.engine
 
-import org.apache.lucene.util.SloppyMath.haversinMeters
+import org.example.calculator.DistanceCoordinateCalculator
+import org.example.calculator.HaversinDistanceCalculator
 import org.example.data.Coordinate
 import org.example.data.EarthquakeData
 import org.example.data.EarthquakeFromCoordinatePoint
@@ -12,13 +13,14 @@ fun calculateFromCoordinates(placeCoordinate: Coordinate): List<EarthquakeFromCo
     val earthquakeData = getEarthquakeList(
         FileEarthquakeDataExtractor(filePath = "src/main/resources/api-response.json")
     )
-    return getClosestEarthquakes(placeCoordinate, earthquakeData)
+    return getClosestEarthquakes(placeCoordinate, earthquakeData, HaversinDistanceCalculator())
 }
 
 
 fun getClosestEarthquakes(
     placeCoordinate: Coordinate,
     earthquakeData: EarthquakeData,
+    coordinateCalculator: DistanceCoordinateCalculator,
     earthquakesAmount: Int = 10
 ): List<EarthquakeFromCoordinatePoint> {
     val earthquakeCoordinatesMap: Map<String, Coordinate> = earthquakeData.features.associate {
@@ -27,9 +29,7 @@ fun getClosestEarthquakes(
     }
     val earthquakeDistanceMap = mutableMapOf<String, Double>()
     earthquakeCoordinatesMap.forEach { earthquakeCoordinate ->
-        val (inputLatitude, inputLongitude) = placeCoordinate
-        val (earthquakeLatitude, earthquakeLongitude) = earthquakeCoordinate.value
-        val meters = haversinMeters(inputLatitude, inputLongitude, earthquakeLatitude, earthquakeLongitude)
+        val meters = calculateDistanceBetweenPoints(placeCoordinate, earthquakeCoordinate.value, coordinateCalculator)
         earthquakeDistanceMap[earthquakeCoordinate.key] = meters
     }
     val closestEarthquakes: List<EarthquakeFromCoordinatePoint> =
@@ -39,7 +39,14 @@ fun getClosestEarthquakes(
                 distance = it.value
             )
         }
-
     return closestEarthquakes
+}
+
+private fun calculateDistanceBetweenPoints(
+    inputCoordinate: Coordinate,
+    earthquakeCoordinate: Coordinate,
+    distanceCoordinateCalculator: DistanceCoordinateCalculator
+): Double {
+    return distanceCoordinateCalculator.calculateDistanceInMeters(inputCoordinate, earthquakeCoordinate)
 }
 
