@@ -11,16 +11,19 @@ data class Coordinate(val latitude: Double, val longitude: Double, val depth: Do
 
 data class EarthquakeFromCoordinatePoint(val title: String, val distance: Double) {
     override fun toString(): String {
-        return "$title || $distance"
+        return "$title || ${distance.toInt()}"
     }
 }
 
 fun main() {
     val placeCoordinate = getCoordinates()
-    println(placeCoordinate)
+    val earthquakes = calculateFromCoordinates(placeCoordinate)
+    println(earthquakes)
+}
+
+fun calculateFromCoordinates(placeCoordinate: Coordinate): List<EarthquakeFromCoordinatePoint> {
     val earthquakeData = getEarthquakeList()
-    val closestEarthquakesToThePoint = getClosestEarthquakes(placeCoordinate, earthquakeData)
-    closestEarthquakesToThePoint.forEach { println(it) }
+    return getClosestEarthquakes(placeCoordinate, earthquakeData)
 }
 
 fun getClosestEarthquakes(
