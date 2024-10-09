@@ -9,8 +9,11 @@ import org.example.utils.MetersToKilometersConverter
 
 
 fun main() {
-    val placeCoordinate = getCoordinates()
-    val earthquakes = calculateFromCoordinates(placeCoordinate)
+//    val placeCoordinate = getCoordinates()
+    val testCoordinates = Coordinate(
+        35.652832, 139.839478
+    )
+    val earthquakes = calculateFromCoordinates(testCoordinates)
     println(earthquakes)
 }
 
