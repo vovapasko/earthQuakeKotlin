@@ -1,7 +1,5 @@
 package org.example
 
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
 import org.example.utils.HaversinDistanceCalculator
 import models.Coordinate
 import models.EarthquakeFromCoordinatePoint
@@ -11,11 +9,11 @@ import org.example.utils.MetersToKilometersConverter
 
 
 fun main() {
-//    val placeCoordinate = getCoordinates()
-    val testCoordinates = Coordinate(
-        35.652832, 139.839478
-    )
-    val earthquakes = calculateFromCoordinates(testCoordinates)
+    val placeCoordinate = getCoordinates()
+//    val placeCoordinate = Coordinate(
+//        35.652832, 139.839478
+//    )
+    val earthquakes = calculateFromCoordinates(placeCoordinate)
     println(earthquakes)
 }
 
