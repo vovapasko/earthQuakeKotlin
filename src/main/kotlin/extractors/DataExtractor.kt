@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.*
+import io.ktor.client.engine.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -39,8 +40,8 @@ class FileEarthquakeDataExtractor(private val filePath: String) : EarthquakeData
     class InternalParsingException(override val message: String?) : Throwable(message)
 }
 
-class HTTPEarthquakeDataExtractor() : EarthquakeDataExtractor {
-    private val client = HttpClient(CIO)
+class HTTPEarthquakeDataExtractor(engine: HttpClientEngine = CIO.create()) : EarthquakeDataExtractor {
+    private val client = HttpClient(engine)
     private val mapper = jacksonObjectMapper()
 
     override fun retrieveEarthquakeData() = runBlocking {

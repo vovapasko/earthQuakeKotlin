@@ -1,5 +1,7 @@
 package org.example
 
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
 import org.example.utils.HaversinDistanceCalculator
 import models.Coordinate
 import models.EarthquakeFromCoordinatePoint
