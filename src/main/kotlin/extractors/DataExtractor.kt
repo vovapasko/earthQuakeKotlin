@@ -1,5 +1,6 @@
 package org.example.extractors
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.*
@@ -24,9 +25,18 @@ class FileEarthquakeDataExtractor(private val filePath: String) : EarthquakeData
     override fun retrieveEarthquakeData(): EarthquakeData {
         println("Retrieving the data from file")
         val jsonFile = File(filePath)
-        val jsonEarthquakeData: JsonEarthquakeData = mapper.readValue(jsonFile)
-        return JsonEarthquakeData.to(jsonEarthquakeData)
+        try {
+            val jsonEarthquakeData: JsonEarthquakeData = mapper.readValue(jsonFile)
+            return JsonEarthquakeData.to(jsonEarthquakeData)
+        } catch (e: MismatchedInputException) {
+            throw InternalParsingException(
+                "Probably there was a problem with Json parsing of the response. " +
+                        "See the response stacktrace ${e.stackTrace}"
+            )
+        }
     }
+
+    class InternalParsingException(override val message: String?) : Throwable(message)
 }
 
 class HTTPEarthquakeDataExtractor() : EarthquakeDataExtractor {

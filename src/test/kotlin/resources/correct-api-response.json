@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "generated": 1728158626000,
+    "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
+    "title": "USGS All Earthquakes, Past Month",
+    "status": 200,
+    "api": "1.10.3",
+    "count": 9363
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 0.6,
+        "place": "18 km ESE of Julian, CA",
+        "time": 1728158178720,
+        "updated": 1728158556363,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci40752503",
+        "detail": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/ci40752503.geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "automatic",
+        "tsunami": 0,
+        "sig": 6,
+        "net": "ci",
+        "code": "40752503",
+        "ids": ",ci40752503,",
+        "sources": ",ci,",
+        "types": ",nearby-cities,origin,phase-data,scitech-link,",
+        "nst": 31,
+        "dmin": 0.04264,
+        "rms": 0.14,
+        "gap": 42,
+        "magType": "ml",
+        "type": "earthquake",
+        "title": "M 0.6 - 18 km ESE of Julian, CA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -116.4186667,
+          33.0378333,
+          8.91
+        ]
+      },
+      "id": "ci40752503"
+    }
+  ],
+  "bbox": [
+    -179.9046,
+    -60.2615,
+    -3.24,
+    179.8687,
+    80.0092,
+    628.362
+  ]
+}

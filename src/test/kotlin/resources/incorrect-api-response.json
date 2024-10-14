@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "generated": 1728158626000,
+    "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
+    "title": "USGS All Earthquakes, Past Month",
+    "status": 200,
+    "api": "1.10.3",
+    "count": 9363
+  },
+  "bbox": [
+    -179.9046,
+    -60.2615,
+    -3.24,
+    179.8687,
+    80.0092,
+    628.362
+  ]
+}
